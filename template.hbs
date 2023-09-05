@@ -1,0 +1,106 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A4 Size Printable Paper</title>
+    <style>
+      /* Reset some default styles to ensure consistent printing */ body {
+      margin: 0; padding: 0; } /* Define A4 paper size (210mm x 297mm) and set
+      margins */ @page { size: A4; margin: 10mm; } /* Create a container div for
+      the content */ .page { width: 100%; max-width: 100%; padding: 20px;
+      box-sizing: border-box; page-break-after: always; /* Ensure each section
+      starts on a new page */ } /* Header style */ .header { text-align: center;
+      font-size: 24px; margin-bottom: 20px; } /* Content style */ .content {
+      font-size: 14px; line-height: 1.5; } /* Footer style */ .footer {
+      text-align: center; font-size: 14px; margin-top: 20px; } .compname {
+      color: red; text-decoration: underline; margin-bottom: 4px; } .compaddress
+      { font-size: 16px; font-weight: 600; } .contact { font-size: 16px;
+      font-weight: 600; margin-bottom: 1rem; } .reciepnt-info { display: flex;
+      justify-content: space-between; margin-bottom: 1.4rem; }
+      .reciepnt-info-section { font-size: 16px; font-weight: 600; } table, td,
+      th { border: 1px solid; text-align: center; } table { width: 100%;
+      border-collapse: collapse; font-size: 14px; } .remark { border: 2px solid;
+      display: flex; margin-top: 1.4rem; margin-bottom: 1.4rem; } .bank-details
+      { font-weight: 600; } .bank-details-section span { font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <!-- First Page -->
+    <div class="page">
+      <div class="header">
+        <div class="compname">{{compData.compName}}</div>
+        <div class="compaddress">
+          {{compData.add1}}
+        </div>
+        <div class="compaddress"> {{compData.add2}}</div>
+        <div class="contact">Mobile: {{compData.mobile}}</div>
+
+        <div class="">Bill Invoice</div>
+      </div>
+      <div class="content">
+        <div class="reciepnt-info">
+          <div class="reciepnt-info-section">
+            <div>Name : {{invoiceData.recName}}</div>
+            <div>Address : {{invoiceData.recAdd}}</div>
+          </div>
+          <div class="reciepnt-info-section">
+            <div>Date : {{invoiceData.invDate}}</div>
+            <div>Invoice No : {{invoiceData.invNo}}</div>
+          </div>
+        </div>
+        <div class="reciepnt-content">
+          <table>
+            <tr>
+              <th style="width: 15%">Sr No</th>
+              <th style="width: 40%">Particular</th>
+              <th style="width: 15%">Quantity/Size</th>
+              <th style="width: 15%">Rate</th>
+              <th style="width: 15%">Amount</th>
+            </tr>
+
+             {{#each invoiceData.listOfItems}}
+            <tr>
+              <td>{{srno}}</td>
+              <td>{{desc}}</td>
+              <td>{{qty}}</td>
+              <td>{{rate}}</td>
+              <td>{{amt}}</td>
+               {{/each}}
+            </tr>
+            <tr>
+              <td colspan="4" style="font-weight: 600">Grand Total</td>
+
+              <td>{{invoiceData.grandTotal}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="remark">
+          <div
+            class=""
+            style="font-weight: 600; padding: 3px 5px; border-right: 2px solid"
+          >
+            Remarks :
+          </div>
+          <div style="display: flex; align-items: center; padding: 0px 8px">
+            {{invoiceData.remark}}
+          </div>
+        </div>
+        <div>
+          <div class="bank-details">Bank Details</div>
+          <div class="bank-details-section">
+            <div><span>Account No.</span> {{compData.accNo}}</div>
+            <div><span>IFSC Code.</span> {{compData.ifsc}}</div>
+            <div><span>Account Holder Name.</span> {{compData.accountName}}</div>
+            <div><span>Bank Account Name.</span> {{compData.bankName}}</div>
+
+            <div style="margin-top: 6px;">
+              <span>Note:.</span>
+             {{compData.extraNote}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Page 1 of 1</div>
+    </div>
+  </body>
+</html>

@@ -1,10 +1,17 @@
 "use client";
 import React from "react";
+export interface itemsData {
+  key: number;
+  desc: string;
+  qty: number;
+  amt: number;
+  isEdit: boolean;
+}
 
 export default function Page() {
   const [pdfLink, setPdfLink] = React.useState<any>();
   const [showError, setShowError] = React.useState(false);
-  const [tableData, setTableData] = React.useState([]);
+  const [tableData, setTableData] = React.useState<Array<itemsData>>([]);
   const [formValues, setFormValues] = React.useState({
     recName: "",
     recAdd: "",
@@ -17,7 +24,9 @@ export default function Page() {
 
   function onAddItem(params: any) {
     let tempTableData: any = [...tableData];
-    if (tempTableData.filter((xx: any) => xx.isEdit === true).length > 0) {
+    if (
+      tempTableData.filter((xx: itemsData) => xx.isEdit === true).length > 0
+    ) {
       setShowError(true);
     } else {
       tempTableData.push({
@@ -32,13 +41,13 @@ export default function Page() {
   }
 
   function deleteRecord(key: number) {
-    setTableData([...tableData].filter((xx: any) => xx.key !== key));
+    setTableData([...tableData].filter((xx: itemsData) => xx.key !== key));
     setRefresh(!refresh);
   }
 
   function onEditSave(key: number) {
     let tempTableData: any = [...tableData];
-    let index = tableData.findIndex((xx: any) => xx.key === key);
+    let index = tableData.findIndex((xx: itemsData) => xx.key === key);
 
     tempTableData[index].isEdit = false;
     setTableData(tempTableData);
@@ -47,7 +56,7 @@ export default function Page() {
 
   function onEditClick(key: number) {
     let tempTableData: any = [...tableData];
-    let index = tableData.findIndex((xx: any) => xx.key === key);
+    let index = tableData.findIndex((xx: itemsData) => xx.key === key);
 
     tempTableData[index].isEdit = true;
     setTableData(tempTableData);
@@ -65,13 +74,14 @@ export default function Page() {
   }, [refresh]);
 
   async function handleSave() {
+    setPdfLink(null);
     let finalData = {
       recName: formValues.recName,
       recAdd: formValues.recAdd,
       invNo: formValues.invNo,
       invDate: formValues.invDate,
       remark: formValues.remark,
-      listOfItems: [],
+      listOfItems: tableData,
       grandTotal: totalCost,
     };
     generatePDF(finalData);
@@ -91,7 +101,7 @@ export default function Page() {
       if (response.ok) {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
-        console.log("url",url)
+        console.log("url", url);
         // const box = document.createElement("a");
         setPdfLink(url);
         // if (url) {
@@ -119,15 +129,15 @@ export default function Page() {
       >
         <path
           d="M17 20.75H7C6.27065 20.75 5.57118 20.4603 5.05546 19.9445C4.53973 19.4288 4.25 18.7293 4.25 18V6C4.25 5.27065 4.53973 4.57118 5.05546 4.05546C5.57118 3.53973 6.27065 3.25 7 3.25H14.5C14.6988 3.25018 14.8895 3.32931 15.03 3.47L19.53 8C19.6707 8.14052 19.7498 8.33115 19.75 8.53V18C19.75 18.7293 19.4603 19.4288 18.9445 19.9445C18.4288 20.4603 17.7293 20.75 17 20.75ZM7 4.75C6.66848 4.75 6.35054 4.8817 6.11612 5.11612C5.8817 5.35054 5.75 5.66848 5.75 6V18C5.75 18.3315 5.8817 18.6495 6.11612 18.8839C6.35054 19.1183 6.66848 19.25 7 19.25H17C17.3315 19.25 17.6495 19.1183 17.8839 18.8839C18.1183 18.6495 18.25 18.3315 18.25 18V8.81L14.19 4.75H7Z"
-          fill="#fff"
+          fill="#000"
         />
         <path
           d="M16.75 20H15.25V13.75H8.75V20H7.25V13.5C7.25 13.1685 7.3817 12.8505 7.61612 12.6161C7.85054 12.3817 8.16848 12.25 8.5 12.25H15.5C15.8315 12.25 16.1495 12.3817 16.3839 12.6161C16.6183 12.8505 16.75 13.1685 16.75 13.5V20Z"
-          fill="#fff"
+          fill="#000"
         />
         <path
           d="M12.47 8.75H8.53001C8.3606 8.74869 8.19311 8.71403 8.0371 8.64799C7.88109 8.58195 7.73962 8.48582 7.62076 8.36511C7.5019 8.24439 7.40798 8.10144 7.34437 7.94443C7.28075 7.78741 7.24869 7.61941 7.25001 7.45V4H8.75001V7.25H12.25V4H13.75V7.45C13.7513 7.61941 13.7193 7.78741 13.6557 7.94443C13.592 8.10144 13.4981 8.24439 13.3793 8.36511C13.2604 8.48582 13.1189 8.58195 12.9629 8.64799C12.8069 8.71403 12.6394 8.74869 12.47 8.75Z"
-          fill="#fff"
+          fill="#000"
         />
       </svg>
     );
@@ -146,13 +156,13 @@ export default function Page() {
           <path
             d="M20 12C20 7.58172 16.4183 4 12 4M12 20C14.5264 20 16.7792 18.8289 18.2454 17"
             stroke="#fff"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke-linecap="round"
           />
           <path
             d="M4 12H14M14 12L11 9M14 12L11 15"
             stroke="#fff"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
           />
@@ -371,20 +381,13 @@ export default function Page() {
                                     className="mr-3 cursor-pointer"
                                     onClick={() => deleteRecord(ele.key)}
                                   >
-                                    <DeleteIcon /> Delete
+                                    Delete
                                   </p>
                                   <p
                                     className="cursor-pointer"
                                     onClick={() => onEditClick(ele.key)}
                                   >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="16"
-                                      height="16"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z" />
-                                    </svg>
+                                    Edit
                                   </p>
                                 </>
                               ) : (
@@ -392,7 +395,8 @@ export default function Page() {
                                   className="cursor-pointer"
                                   onClick={() => onEditSave(ele.key)}
                                 >
-                                  <svg
+                                  save
+                                  {/* <svg
                                     className=""
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -400,7 +404,7 @@ export default function Page() {
                                     viewBox="0 0 24 24"
                                   >
                                     <path d="M14 3h2.997v5h-2.997v-5zm9 1v20h-22v-24h17.997l4.003 4zm-17 5h12v-7h-12v7zm14 4h-16v9h16v-9z" />
-                                  </svg>
+                                  </svg> */}
                                 </p>
                               )}
                             </td>

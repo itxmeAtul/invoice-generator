@@ -14,7 +14,7 @@
       /* Define A4 paper size (210mm x 297mm) and set margins */
       @page {
         size: A4;
-        margin: 20mm 10mm;
+        margin: 10mm;
       }
 
       /* Create a container div for the content */
@@ -35,7 +35,7 @@
 
       /* Content style */
       .content {
-        font-size: 16px;
+        font-size: 14px;
         line-height: 1.5;
       }
 
@@ -48,7 +48,7 @@
       .compname {
         color: red;
         text-decoration: underline;
-        margin-bottom: 1rem;
+        margin-bottom: 4px;
       }
 
       .compaddress {
@@ -63,6 +63,7 @@
       .reciepnt-info {
         display: flex;
         justify-content: space-between;
+        margin-bottom: 1.4rem;
       }
       .reciepnt-info-section {
         font-size: 16px;
@@ -79,6 +80,21 @@
       table {
         width: 100%;
         border-collapse: collapse;
+        font-size: 14px;
+      }
+      .remark {
+        border: 2px solid;
+        display: flex;
+        margin-top: 1.4rem;
+        margin-bottom: 1.4rem;
+      }
+
+      .bank-details {
+        font-weight: 600;
+      }
+
+      .bank-details-section span {
+        font-weight: 600;
       }
     </style>
   </head>
@@ -86,7 +102,7 @@
     <!-- First Page -->
     <div class="page">
       <div class="header">
-        <div class="compname">REDCLIP EVENT AND ENTERTAINMENT</div>
+        <div class="compname">REDCLIP EVENTS AND ENTERTAINMENT</div>
         <div class="compaddress">
           Kasam Shaikh Chawl No.33, V.L. Sawant Marg, Amboli, Bhardawadi,
           Andheri West,
@@ -110,11 +126,11 @@
         <div class="reciepnt-content">
           <table>
             <tr>
-              <th>Sr No</th>
-              <th>Particular</th>
-              <th>Quantity/Size</th>
-              <th>Rate</th>
-              <th>Amount</th>
+              <th style="width: 15%">Sr No</th>
+              <th style="width: 40%">Particular</th>
+              <th style="width: 15%">Quantity/Size</th>
+              <th style="width: 15%">Rate</th>
+              <th style="width: 15%">Amount</th>
             </tr>
             <tr>
               <td>1</td>
@@ -123,10 +139,38 @@
               <td>10</td>
               <td>200</td>
             </tr>
+            <tr>
+              <td colspan="4" style="font-weight: 600">Grand Total</td>
+
+              <td>200</td>
+            </tr>
           </table>
         </div>
-        <div>remark</div>
-        <div>bank details</div>
+        <div class="remark">
+          <div
+            class=""
+            style="font-weight: 600; padding: 3px 5px; border-right: 2px solid"
+          >
+            Remarks :
+          </div>
+          <div style="display: flex; align-items: center; padding: 0px 8px">
+            remarkvaue
+          </div>
+        </div>
+        <div>
+          <div class="bank-details">Bank Details</div>
+          <div class="bank-details-section">
+            <div><span>Account No.</span> 1230</div>
+            <div><span>IFSC Code.</span> 1230</div>
+            <div><span>Account Holder Name.</span> 1230</div>
+            <div><span>Bank Account Name.</span> 1230</div>
+
+            <div style="margin-top: 6px;">
+              <span>Note:.</span> ** Cheque should be issued in the name of Mr.
+              Mayur Maruti Patil
+            </div>
+          </div>
+        </div>
       </div>
       <div class="footer">Page 1 of 1</div>
     </div>
