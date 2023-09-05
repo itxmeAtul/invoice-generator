@@ -7,8 +7,23 @@ import handlebars from "handlebars";
 import path from "path";
 import Chromium from "chrome-aws-lambda";
 
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const getBrowser = () =>
+      IS_PRODUCTION
+        ? // Connect to browserless so we don't run Chrome on the same hardware in production
+          puppeteer.connect({
+            browserWSEndpoint:
+              "wss://chrome.browserless.io?token=c0c24fcd-0b57-4fa4-a1f8-bd9da19e64dd",
+          })
+        : // Run the browser locally while in development
+          puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+          });
+
     const { params } = req.body;
     let compData = {
       compName: "REDCLIP EVENT AND ENTERTAINMENT",
@@ -239,12 +254,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      // executablePath: "google-chrome-stable",
-      executablePath: await Chromium.executablePath,
-      headless: true,
-    });
+    const browser = await getBrowser();
+    //  puppeteer.launch({
+    //   args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    //   // executablePath: "google-chrome-stable",
+    //   executablePath: await Chromium.executablePath,
+    //   headless: true,
+    // });
     const page = await browser.newPage();
 
     // Read the Handlebars template file
