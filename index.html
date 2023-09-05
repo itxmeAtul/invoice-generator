@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,37 +8,30 @@
       body {
         margin: 0;
         padding: 0;
-      }
-
-      /* Define A4 paper size (210mm x 297mm) and set margins */
+      } /* Define A4 paper size (210mm x 297mm) and set
+      margins */
       @page {
         size: A4;
         margin: 10mm;
-      }
-
-      /* Create a container div for the content */
+      } /* Create a container div for
+      the content */
       .page {
         width: 100%;
         max-width: 100%;
         padding: 20px;
         box-sizing: border-box;
-        page-break-after: always; /* Ensure each section starts on a new page */
-      }
-
-      /* Header style */
+        page-break-after: always; /* Ensure each section
+      starts on a new page */
+      } /* Header style */
       .header {
         text-align: center;
         font-size: 24px;
         margin-bottom: 20px;
-      }
-
-      /* Content style */
+      } /* Content style */
       .content {
         font-size: 14px;
         line-height: 1.5;
-      }
-
-      /* Footer style */
+      } /* Footer style */
       .footer {
         text-align: center;
         font-size: 14px;
@@ -50,7 +42,6 @@
         text-decoration: underline;
         margin-bottom: 4px;
       }
-
       .compaddress {
         font-size: 16px;
         font-weight: 600;
@@ -69,14 +60,12 @@
         font-size: 16px;
         font-weight: 600;
       }
-
       table,
       td,
       th {
         border: 1px solid;
         text-align: center;
       }
-
       table {
         width: 100%;
         border-collapse: collapse;
@@ -88,11 +77,9 @@
         margin-top: 1.4rem;
         margin-bottom: 1.4rem;
       }
-
       .bank-details {
         font-weight: 600;
       }
-
       .bank-details-section span {
         font-weight: 600;
       }
@@ -102,25 +89,22 @@
     <!-- First Page -->
     <div class="page">
       <div class="header">
-        <div class="compname">REDCLIP EVENTS AND ENTERTAINMENT</div>
-        <div class="compaddress">
-          Kasam Shaikh Chawl No.33, V.L. Sawant Marg, Amboli, Bhardawadi,
-          Andheri West,
-        </div>
-        <div class="compaddress">Mumbai - 400 058</div>
-        <div class="contact">Mobile: 9892006037/ 9619990462</div>
+        <div class="compname">{{compData.compName}}</div>
+        <div class="compaddress">{{compData.add1}}</div>
+        <div class="compaddress">{{compData.add2}}</div>
+        <div class="contact">Mobile: {{compData.mobile}}</div>
 
         <div class="">Bill Invoice</div>
       </div>
       <div class="content">
         <div class="reciepnt-info">
           <div class="reciepnt-info-section">
-            <div>Name : Atul More</div>
-            <div>Address : Amboli Andheri west</div>
+            <div>Name : {{invoiceData.recName}}</div>
+            <div>Address : {{invoiceData.recAdd}}</div>
           </div>
           <div class="reciepnt-info-section">
-            <div>Date : 25-09-2013</div>
-            <div>Invoice No : 250910</div>
+            <div>Date : {{invoiceData.invDate}}</div>
+            <div>Invoice No : {{invoiceData.invNo}}</div>
           </div>
         </div>
         <div class="reciepnt-content">
@@ -132,17 +116,20 @@
               <th style="width: 15%">Rate</th>
               <th style="width: 15%">Amount</th>
             </tr>
+
+            {{#each invoiceData.listOfItems}}
             <tr>
-              <td>1</td>
-              <td>Chairs</td>
-              <td>20</td>
-              <td>10</td>
-              <td>200</td>
+              <td>{{srno}}</td>
+              <td>{{desc}}</td>
+              <td>{{qty}}</td>
+              <td style="text-align: right">{{rate}}</td>
+              <td style="text-align: right">{{amt}}</td>
+              {{/each}}
             </tr>
             <tr>
               <td colspan="4" style="font-weight: 600">Grand Total</td>
 
-              <td>200</td>
+              <td>{{invoiceData.grandTotal}}</td>
             </tr>
           </table>
         </div>
@@ -154,20 +141,22 @@
             Remarks :
           </div>
           <div style="display: flex; align-items: center; padding: 0px 8px">
-            remarkvaue
+            {{invoiceData.remark}}
           </div>
         </div>
         <div>
           <div class="bank-details">Bank Details</div>
           <div class="bank-details-section">
-            <div><span>Account No.</span> 1230</div>
-            <div><span>IFSC Code.</span> 1230</div>
-            <div><span>Account Holder Name.</span> 1230</div>
-            <div><span>Bank Account Name.</span> 1230</div>
+            <div><span>Account No.</span> {{compData.accNo}}</div>
+            <div><span>IFSC Code.</span> {{compData.ifsc}}</div>
+            <div>
+              <span>Account Holder Name.</span> {{compData.accountName}}
+            </div>
+            <div><span>Bank Account Name.</span> {{compData.bankName}}</div>
 
-            <div style="margin-top: 6px;">
-              <span>Note:.</span> ** Cheque should be issued in the name of Mr.
-              Mayur Maruti Patil
+            <div style="margin-top: 6px">
+              <span>Note:.</span>
+              {{compData.extraNote}}
             </div>
           </div>
         </div>

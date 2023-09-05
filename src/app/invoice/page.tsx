@@ -3,8 +3,9 @@ import React from "react";
 export interface itemsData {
   key: number;
   desc: string;
-  qty: number;
-  amt: number;
+  qty: any;
+  amt: any;
+  rate: any;
   isEdit: boolean;
 }
 
@@ -21,6 +22,7 @@ export default function Page() {
   });
   const [totalCost, setTotalCost] = React.useState(0);
   const [refresh, setRefresh] = React.useState(false);
+  const [downloadStatus, setDownloadStatus] = React.useState(false);
 
   function onAddItem(params: any) {
     let tempTableData: any = [...tableData];
@@ -34,6 +36,7 @@ export default function Page() {
         desc: "",
         qty: "",
         amt: "",
+        rate: "",
         isEdit: true,
       });
       setTableData(tempTableData);
@@ -74,6 +77,7 @@ export default function Page() {
   }, [refresh]);
 
   async function handleSave() {
+    setDownloadStatus(true);
     setPdfLink(null);
     let finalData = {
       recName: formValues.recName,
@@ -84,8 +88,20 @@ export default function Page() {
       listOfItems: tableData,
       grandTotal: totalCost,
     };
-    generatePDF(finalData);
-    console.log(finalData, "finalData");
+    const isObjectEmpty = (objectName: any) => {
+      return (
+        Object.keys(objectName).length === 0 &&
+        objectName.constructor === Object
+      );
+    };
+
+    if (isObjectEmpty(finalData)) {
+      console.log("first")
+    } else {
+      console.log("secrond")
+    }
+    // generatePDF(finalData);
+    // console.log(finalData, "finalData");
   }
 
   const generatePDF = async (invoicedata: any) => {
@@ -102,20 +118,26 @@ export default function Page() {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         console.log("url", url);
-        // const box = document.createElement("a");
-        setPdfLink(url);
-        // if (url) {
-        //   box.href = url;
-        //   // box.download = "generated-pdf.pdf";
-        //   box.download = "generated.pdf";
-        //   document.body.appendChild(box);
-        //   box.click();
-        // }
+        const box = document.createElement("a");
+        // setPdfLink(url);
+        // setDownloadStatus(false);
+        if (url) {
+          box.href = url;
+          box.target = "_blank";
+          document.body.appendChild(box);
+          box.download = `invoice-${formValues.recName}.pdf`;
+          box.rel = "noopener noreferrer";
+          box.click();
+
+          setDownloadStatus(false);
+        }
       } else {
         console.error("PDF generation failed");
+        setDownloadStatus(false);
       }
     } catch (error) {
       console.error("Error:", error);
+      setDownloadStatus(false);
     }
   };
   const DeleteIcon = () => {
@@ -157,14 +179,14 @@ export default function Page() {
             d="M20 12C20 7.58172 16.4183 4 12 4M12 20C14.5264 20 16.7792 18.8289 18.2454 17"
             stroke="#fff"
             strokeWidth="1.5"
-            stroke-linecap="round"
+            strokeLinecap="round"
           />
           <path
             d="M4 12H14M14 12L11 9M14 12L11 15"
             stroke="#fff"
             strokeWidth="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
@@ -176,9 +198,9 @@ export default function Page() {
       {true && (
         <>
           <main className="flex min-h-screen p-4 flex-col items-center justify-between  sm:p-6 md:p-8 xs:p-4">
-            <div className="w-full max-w-2xl p-4  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 md:mt-10">
+            <div className="w-full max-w-2xl p-4  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:text-black md:mt-10 dark:text-black">
               <div className="relative z-0 w-full mb-6 group flex justify-center">
-                <div className="relative  overflow-hidden font-bold text-xl ">
+                <div className="relative  overflow-hidden font-bold text-xl text-gray-900 ">
                   Invoice Generator
                 </div>
               </div>
@@ -264,7 +286,7 @@ export default function Page() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-300 border dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" colSpan={9} className="px-6 py-3  ">
+                      <th scope="col" colSpan={10} className="px-6 py-3  ">
                         List of items
                       </th>
                       <th scope="col" className="px-6 py-3  ">
@@ -296,6 +318,9 @@ export default function Page() {
                         Quantity/Size
                       </th>
                       <th scope="col" colSpan={1} className="px-6 py-3">
+                        Rate
+                      </th>
+                      <th scope="col" colSpan={1} className="px-6 py-3">
                         Amount
                       </th>
                       <th scope="col" colSpan={1} className="px-6 py-3">
@@ -305,7 +330,7 @@ export default function Page() {
                   </thead>
                   <tbody>
                     {tableData.length > 0 ? (
-                      tableData.map((ele: any, idx: number) => {
+                      tableData.map((ele: itemsData, idx: number) => {
                         return (
                           <tr
                             key={idx}
@@ -341,13 +366,29 @@ export default function Page() {
                                   // pattern="[0-9]{5}"
                                   className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                   onChange={(e) => {
-                                    let tempTableData: any = [...tableData];
-                                    let index = tableData.findIndex(
-                                      (xx: any) => xx.key === ele.key
-                                    );
+                                    let tempqty = +e.target.value;
+                                    let tempTableData: Array<itemsData> = [
+                                      ...tableData,
+                                    ];
 
-                                    tempTableData[index].qty = e.target.value;
+                                    tempTableData[idx].qty =
+                                      tempqty > 0 ? tempqty : "";
+                                    tempTableData[idx].rate = "";
+                                    tempTableData[idx].amt = "";
+
                                     setTableData(tempTableData);
+
+                                    // let index = tableData.findIndex(
+                                    //   (xx: any) => xx.key === ele.key
+                                    // );
+
+                                    // let calc =
+                                    //   tempqty * ele.rate ? ele.rate : 0;
+
+                                    // tempTableData[index].qty =
+                                    //   tempqty > 0 ? tempqty : null;
+                                    // tempTableData[idx].amt = calc;
+                                    // setTableData(tempTableData);
                                   }}
                                 />
                               ) : (
@@ -358,21 +399,41 @@ export default function Page() {
                               {ele.isEdit ? (
                                 <input
                                   type="number"
-                                  value={ele.amt}
+                                  value={ele.rate}
                                   className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  onChange={(e) => {
-                                    let tempTableData: any = [...tableData];
-                                    let index = tableData.findIndex(
-                                      (xx: any) => xx.key === ele.key
-                                    );
+                                  onChange={(e: any) => {
+                                    let tempRate = +e.target.value;
+                                    let tempTableData: Array<itemsData> = [
+                                      ...tableData,
+                                    ];
 
-                                    tempTableData[index].amt = e.target.value;
+                                    let calc =
+                                      (tempTableData[idx].qty > 0
+                                        ? tempTableData[idx].qty
+                                        : 0) * (tempRate > 0 ? tempRate : 0);
+
+                                    tempTableData[idx].rate =
+                                      tempRate > 0 ? tempRate : "";
+                                    tempTableData[idx].amt = calc;
                                     setTableData(tempTableData);
+                                    // let index = tableData.findIndex(
+                                    //   (xx: any) => xx.key === ele.key
+                                    // );
+
+                                    //
+
+                                    // tempTableData[index].rate =
+                                    //   tempRate > 0 ? tempRate : 0;
+                                    // tempTableData[idx].amt = calc;
+                                    // setTableData(tempTableData);
                                   }}
                                 />
                               ) : (
-                                `${ele.amt}`
+                                `${ele.rate}`
                               )}
+                            </td>
+                            <td colSpan={1} className="px-6 py-4">
+                              {ele?.amt}
                             </td>
                             <td colSpan={1} className="px-6 py-4 flex">
                               {!ele.isEdit ? (
@@ -413,13 +474,13 @@ export default function Page() {
                       })
                     ) : (
                       <tr className="bg-white border-b text-center dark:bg-gray-800 dark:border-gray-700">
-                        <td colSpan={10} className="px-6 py-4">
+                        <td colSpan={11} className="px-6 py-4">
                           Nothing to display
                         </td>
                       </tr>
                     )}
                     <tr>
-                      <th scope="col" colSpan={8} className="px-6 py-3  ">
+                      <th scope="col" colSpan={9} className="px-6 py-3  ">
                         Grand Total
                       </th>
                       <th scope="col" colSpan={2} className="px-6 py-3  ">
@@ -432,9 +493,12 @@ export default function Page() {
 
               <div className="relative z-0 w-full mt-6  text-center ">
                 <button
+                  disabled={downloadStatus}
                   type="submit"
                   onClick={handleSave}
-                  className="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className={`flex items-center justify-center text-white bg-blue-700 ${
+                    downloadStatus ? "hover:bg-gray-800" : "hover:bg-blue-800"
+                  } focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                 >
                   <GenerateIcon />
                   Generate PDF
@@ -453,9 +517,9 @@ export default function Page() {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     ></path>
                   </svg>
                   <span className="sr-only">Info</span>
@@ -480,23 +544,34 @@ export default function Page() {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       ></path>
                     </svg>
                   </button>
                 </div>
               )}
 
-              {pdfLink && (
-                <div>
-                  <p>Click below to download the generated PDF:</p>
-                  <a href={pdfLink} download="generated-pdf.pdf">
-                    Download PDF
-                  </a>
+              {/* {pdfLink && (
+                <div className="text-gray-800">
+                  <button type="button">
+                    <a
+                      href={pdfLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={`inovice-${formValues.recName}.pdf`}
+                      onClick={() => {
+                        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                          window.open(pdfLink, "_blank");
+                        }
+                      }}
+                    >
+                      Download PDF
+                    </a>
+                  </button>
                 </div>
-              )}
+              )} */}
             </div>
           </main>
         </>

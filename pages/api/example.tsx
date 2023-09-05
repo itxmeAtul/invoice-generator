@@ -51,7 +51,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       tempListOfItems.push({ ...element, srno: index + 1 });
     }
 
-    console.log(tempListOfItems, "tempListOfItems");
+    console.log(params, "tempListOfItems");
     let tempInvoiceData = {
       recName: params.recName,
       recAdd: params.recAdd,
@@ -59,7 +59,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       invDate: params.invDate,
       remark: params.remark,
       listOfItems: tempListOfItems,
-      grandTotal: 100,
+      grandTotal: params.grandTotal,
     };
 
     const htmlContent = `<!DOCTYPE html>
