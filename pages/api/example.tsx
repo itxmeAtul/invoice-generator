@@ -50,6 +50,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const element = array[index];
       tempListOfItems.push({ ...element, srno: index + 1 });
     }
+    if(tempListOfItems.length<=10){
+      for (let index = array.length - 1; index <=10; index++) {
+        tempListOfItems.push({ })
+        
+      }
+    }
 
     console.log(params, "tempListOfItems");
     let tempInvoiceData = {

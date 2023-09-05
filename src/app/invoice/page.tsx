@@ -12,7 +12,7 @@ export interface itemsData {
 export default function Page() {
   const [pdfLink, setPdfLink] = React.useState<any>();
   const [showError, setShowError] = React.useState(false);
-  const [tableData, setTableData] = React.useState<Array<itemsData>>([]);
+  const [tableData, setTableData] = React.useState<itemsData[]>([]);
   const [formValues, setFormValues] = React.useState({
     recName: "",
     recAdd: "",
@@ -106,7 +106,7 @@ export default function Page() {
 
   const generatePDF = async (invoicedata: any) => {
     try {
-      const response = await fetch("/api/example", {
+      const response = await fetch("/api/generatepdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -286,7 +286,7 @@ export default function Page() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-300 border dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" colSpan={10} className="px-6 py-3  ">
+                      <th scope="col" colSpan={15} className="px-6 py-3  ">
                         List of items
                       </th>
                       <th scope="col" className="px-6 py-3  ">
@@ -298,29 +298,22 @@ export default function Page() {
                         >
                           Add Item
                         </p>
-                        {/* <button
-                    
-                    className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button"
-                  >
-                    Toggle modal
-                  </button> */}
                       </th>
                     </tr>
                     <tr className="border border-black-700">
                       <th scope="col" colSpan={1} className="px-6 py-3">
                         #
                       </th>
-                      <th scope="col" colSpan={6} className="px-6 py-3">
+                      <th scope="col" colSpan={8} className="px-6 py-3">
                         Particular
                       </th>
-                      <th scope="col" colSpan={1} className="px-6 py-3">
-                        Quantity/Size
+                      <th scope="col" colSpan={2} className="px-6 py-3">
+                        Quantity
                       </th>
-                      <th scope="col" colSpan={1} className="px-6 py-3">
+                      <th scope="col" colSpan={2} className="px-6 py-3">
                         Rate
                       </th>
-                      <th scope="col" colSpan={1} className="px-6 py-3">
+                      <th scope="col" colSpan={2} className="px-6 py-3">
                         Amount
                       </th>
                       <th scope="col" colSpan={1} className="px-6 py-3">
@@ -339,63 +332,57 @@ export default function Page() {
                             <td colSpan={1} className="px-6 py-4">
                               {idx + 1}
                             </td>
-                            <td colSpan={6} className="px-6 py-4">
+                            <td colSpan={8} className="px-6 py-4">
                               {ele.isEdit ? (
-                                <input
-                                  type="text"
-                                  value={ele.desc}
-                                  className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  onChange={(e) => {
-                                    let tempTableData: any = [...tableData];
-                                    let index = tableData.findIndex(
-                                      (xx: any) => xx.key === ele.key
-                                    );
-                                    tempTableData[index].desc = e.target.value;
-                                    setTableData(tempTableData);
-                                  }}
-                                />
+                                <>
+                                  <input
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" "
+                                    required
+                                    value={ele.desc}
+                                    onChange={(e) => {
+                                      let tempTableData: any = [...tableData];
+                                      let index = tableData.findIndex(
+                                        (xx: any) => xx.key === ele.key
+                                      );
+                                      tempTableData[index].desc =
+                                        e.target.value;
+                                      setTableData(tempTableData);
+                                    }}
+                                  />
+                                </>
                               ) : (
                                 `${ele.desc}`
                               )}
                             </td>
-                            <td colSpan={1} className="px-6 py-4">
+                            <td colSpan={2} className="px-6 py-4">
                               {ele.isEdit ? (
-                                <input
-                                  type="number"
-                                  value={ele.qty}
-                                  // pattern="[0-9]{5}"
-                                  className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  onChange={(e) => {
-                                    let tempqty = +e.target.value;
-                                    let tempTableData: Array<itemsData> = [
-                                      ...tableData,
-                                    ];
+                                <>
+                                  <input
+                                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" "
+                                    required
+                                    value={ele.qty}
+                                    onChange={(e) => {
+                                      let tempqty = +e.target.value;
+                                      let tempTableData: Array<itemsData> = [
+                                        ...tableData,
+                                      ];
 
-                                    tempTableData[idx].qty =
-                                      tempqty > 0 ? tempqty : "";
-                                    tempTableData[idx].rate = "";
-                                    tempTableData[idx].amt = "";
+                                      tempTableData[idx].qty =
+                                        tempqty > 0 ? tempqty : "";
+                                      tempTableData[idx].rate = "";
+                                      tempTableData[idx].amt = "";
 
-                                    setTableData(tempTableData);
-
-                                    // let index = tableData.findIndex(
-                                    //   (xx: any) => xx.key === ele.key
-                                    // );
-
-                                    // let calc =
-                                    //   tempqty * ele.rate ? ele.rate : 0;
-
-                                    // tempTableData[index].qty =
-                                    //   tempqty > 0 ? tempqty : null;
-                                    // tempTableData[idx].amt = calc;
-                                    // setTableData(tempTableData);
-                                  }}
-                                />
+                                      setTableData(tempTableData);
+                                    }}
+                                  />
+                                </>
                               ) : (
                                 `${ele.qty}`
                               )}
                             </td>
-                            <td colSpan={1} className="px-6 py-4">
+                            <td colSpan={2} className="px-6 py-4">
                               {ele.isEdit ? (
                                 <input
                                   type="number"
@@ -432,41 +419,40 @@ export default function Page() {
                                 `${ele.rate}`
                               )}
                             </td>
-                            <td colSpan={1} className="px-6 py-4">
+                            <td colSpan={2} className="px-6 py-4">
                               {ele?.amt}
                             </td>
                             <td colSpan={1} className="px-6 py-4 flex">
                               {!ele.isEdit ? (
                                 <>
-                                  <p
+                                  <a
                                     className="mr-3 cursor-pointer"
                                     onClick={() => deleteRecord(ele.key)}
                                   >
-                                    Delete
-                                  </p>
-                                  <p
+                                    delete
+                                  </a>
+                                  <a
                                     className="cursor-pointer"
                                     onClick={() => onEditClick(ele.key)}
                                   >
-                                    Edit
-                                  </p>
+                                    edit
+                                  </a>
                                 </>
                               ) : (
-                                <p
-                                  className="cursor-pointer"
-                                  onClick={() => onEditSave(ele.key)}
-                                >
-                                  save
-                                  {/* <svg
-                                    className=""
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
+                                <>
+                                  <a
+                                    className="cursor-pointer mr-3 "
+                                    onClick={() => onEditSave(ele.key)}
                                   >
-                                    <path d="M14 3h2.997v5h-2.997v-5zm9 1v20h-22v-24h17.997l4.003 4zm-17 5h12v-7h-12v7zm14 4h-16v9h16v-9z" />
-                                  </svg> */}
-                                </p>
+                                    save
+                                  </a>
+                                  <a
+                                    className="cursor-pointer"
+                                    onClick={() => {}}
+                                  >
+                                    cancel
+                                  </a>
+                                </>
                               )}
                             </td>
                           </tr>
@@ -474,13 +460,13 @@ export default function Page() {
                       })
                     ) : (
                       <tr className="bg-white border-b text-center dark:bg-gray-800 dark:border-gray-700">
-                        <td colSpan={11} className="px-6 py-4">
+                        <td colSpan={14} className="px-6 py-4">
                           Nothing to display
                         </td>
                       </tr>
                     )}
                     <tr>
-                      <th scope="col" colSpan={9} className="px-6 py-3  ">
+                      <th scope="col" colSpan={12} className="px-6 py-3  ">
                         Grand Total
                       </th>
                       <th scope="col" colSpan={2} className="px-6 py-3  ">

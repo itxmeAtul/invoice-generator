@@ -4,85 +4,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>A4 Size Printable Paper</title>
     <style>
-      /* Reset some default styles to ensure consistent printing */
-      body {
-        margin: 0;
-        padding: 0;
-      } /* Define A4 paper size (210mm x 297mm) and set
-      margins */
-      @page {
-        size: A4;
-        margin: 10mm;
-      } /* Create a container div for
-      the content */
-      .page {
-        width: 100%;
-        max-width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
-        page-break-after: always; /* Ensure each section
-      starts on a new page */
-      } /* Header style */
-      .header {
-        text-align: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-      } /* Content style */
-      .content {
-        font-size: 14px;
-        line-height: 1.5;
-      } /* Footer style */
-      .footer {
-        text-align: center;
-        font-size: 14px;
-        margin-top: 20px;
-      }
-      .compname {
-        color: red;
-        text-decoration: underline;
-        margin-bottom: 4px;
-      }
-      .compaddress {
-        font-size: 16px;
-        font-weight: 600;
-      }
-      .contact {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 1rem;
-      }
-      .reciepnt-info {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1.4rem;
-      }
-      .reciepnt-info-section {
-        font-size: 16px;
-        font-weight: 600;
-      }
-      table,
-      td,
-      th {
-        border: 1px solid;
-        text-align: center;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-      }
-      .remark {
-        border: 2px solid;
-        display: flex;
-        margin-top: 1.4rem;
-        margin-bottom: 1.4rem;
-      }
-      .bank-details {
-        font-weight: 600;
-      }
-      .bank-details-section span {
-        font-weight: 600;
-      }
+      /* Reset some default styles to ensure consistent printing */ body {
+      margin: 0; padding: 0; } /* Define A4 paper size (210mm x 297mm) and set
+      margins */ @page { size: A4; margin: 10mm; } /* Create a container div for
+      the content */ .page { width: 100%; max-width: 100%; padding: 20px;
+      box-sizing: border-box; page-break-after: always; /* Ensure each section
+      starts on a new page */ } /* Header style */ .header { text-align: center;
+      font-size: 24px; margin-bottom: 20px; } /* Content style */ .content {
+      font-size: 14px; line-height: 1.5; } /* Footer style */ .footer {
+      text-align: center; font-size: 14px; margin-top: 20px; } .compname {
+      color: red; text-decoration: underline; margin-bottom: 4px; } .compaddress
+      { font-size: 16px; font-weight: 600; } .contact { font-size: 16px;
+      font-weight: 600; margin-bottom: 1rem; } .reciepnt-info { display: flex;
+      justify-content: space-between; margin-bottom: 1.4rem; }
+      .reciepnt-info-section { font-size: 16px; font-weight: 600; } table, td,
+      th { border: 1px solid; text-align: center; } table { width: 100%;
+      border-collapse: collapse; font-size: 14px; } .remark { border: 2px solid;
+      display: flex; margin-top: 1.4rem; margin-bottom: 1.4rem; } .bank-details
+      { font-weight: 600; } .bank-details-section span { font-weight: 600; }
     </style>
   </head>
   <body>
@@ -90,8 +29,10 @@
     <div class="page">
       <div class="header">
         <div class="compname">{{compData.compName}}</div>
-        <div class="compaddress">{{compData.add1}}</div>
-        <div class="compaddress">{{compData.add2}}</div>
+        <div class="compaddress">
+          {{compData.add1}}
+        </div>
+        <div class="compaddress"> {{compData.add2}}</div>
         <div class="contact">Mobile: {{compData.mobile}}</div>
 
         <div class="">Bill Invoice</div>
@@ -117,19 +58,19 @@
               <th style="width: 15%">Amount</th>
             </tr>
 
-            {{#each invoiceData.listOfItems}}
-            <tr>
-              <td>{{srno}}</td>
+             {{#each invoiceData.listOfItems}}
+            <tr >
+              <td><div style="min-height:45px;" >{{srno}}</div></td>
               <td>{{desc}}</td>
               <td>{{qty}}</td>
-              <td style="text-align: right">{{rate}}</td>
-              <td style="text-align: right">{{amt}}</td>
-              {{/each}}
+              <td style="text-align: right; padding:0px 4px">{{rate}}</td>
+              <td style="text-align: right; padding:0px 4px">{{amt}}</td>
+               {{/each}}
             </tr>
             <tr>
               <td colspan="4" style="font-weight: 600">Grand Total</td>
 
-              <td>{{invoiceData.grandTotal}}</td>
+              <td style="text-align: right;">{{invoiceData.grandTotal}}</td>
             </tr>
           </table>
         </div>
@@ -149,19 +90,17 @@
           <div class="bank-details-section">
             <div><span>Account No.</span> {{compData.accNo}}</div>
             <div><span>IFSC Code.</span> {{compData.ifsc}}</div>
-            <div>
-              <span>Account Holder Name.</span> {{compData.accountName}}
-            </div>
+            <div><span>Account Holder Name.</span> {{compData.accountName}}</div>
             <div><span>Bank Account Name.</span> {{compData.bankName}}</div>
 
-            <div style="margin-top: 6px">
+            <div style="margin-top: 6px;">
               <span>Note:.</span>
-              {{compData.extraNote}}
+             {{compData.extraNote}}
             </div>
           </div>
         </div>
       </div>
-      <div class="footer">Page 1 of 1</div>
+      {{!-- <div class="footer">Page 1 of 1</div> --}}
     </div>
   </body>
 </html>
