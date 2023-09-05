@@ -5,6 +5,7 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 import handlebars from "handlebars";
 import path from "path";
+import Chromium from "chrome-aws-lambda";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -35,7 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       tempListOfItems.push({ ...element, srno: index + 1 });
     }
 
-    console.log(tempListOfItems,"tempListOfItems")
+    console.log(tempListOfItems, "tempListOfItems");
     let tempInvoiceData = {
       recName: params.recName,
       recAdd: params.recAdd,
@@ -239,8 +240,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     `;
 
     const browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      // executablePath: "google-chrome-stable",
+      executablePath: await Chromium.executablePath,
       headless: true,
-      args: ["--headless"],
     });
     const page = await browser.newPage();
 
@@ -255,7 +258,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       compData: compData,
       invoiceData: tempInvoiceData,
     };
-    console.log(data);
 
     // Set the content to be converted to PDF
     const html = compiledTemplate(data);
