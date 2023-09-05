@@ -91,11 +91,16 @@ export default function Page() {
       if (response.ok) {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
-        const box = document.createElement("a");
-        box.href = url;
-        box.download = "generated-pdf.pdf";
-        document.body.appendChild(box);
-        box.click();
+        console.log("url",url)
+        // const box = document.createElement("a");
+        setPdfLink(url);
+        // if (url) {
+        //   box.href = url;
+        //   // box.download = "generated-pdf.pdf";
+        //   box.download = "generated.pdf";
+        //   document.body.appendChild(box);
+        //   box.click();
+        // }
       } else {
         console.error("PDF generation failed");
       }
@@ -477,6 +482,15 @@ export default function Page() {
                       ></path>
                     </svg>
                   </button>
+                </div>
+              )}
+
+              {pdfLink && (
+                <div>
+                  <p>Click below to download the generated PDF:</p>
+                  <a href={pdfLink} download="generated-pdf.pdf">
+                    Download PDF
+                  </a>
                 </div>
               )}
             </div>
