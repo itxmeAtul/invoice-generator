@@ -88,19 +88,19 @@ export default function Page() {
       listOfItems: tableData,
       grandTotal: totalCost,
     };
-    const isObjectEmpty = (objectName: any) => {
-      return (
-        Object.keys(objectName).length === 0 &&
-        objectName.constructor === Object
-      );
-    };
+    // const isObjectEmpty = (objectName: any) => {
+    //   return (
+    //     Object.keys(objectName).length === 0 &&
+    //     objectName.constructor === Object
+    //   );
+    // };
 
-    if (isObjectEmpty(finalData)) {
-      console.log("first")
-    } else {
-      console.log("secrond")
-    }
-    // generatePDF(finalData);
+    // if (isObjectEmpty(finalData)) {
+    //   console.log("first")
+    // } else {
+    //   console.log("secrond")
+    // }
+    generatePDF(finalData);
     // console.log(finalData, "finalData");
   }
 
