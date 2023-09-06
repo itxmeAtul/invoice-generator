@@ -1,7 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default function App() {
+  // const router = useRouter();
+  // const [user, setUser] = useState(null);
+  // const [authorized, setAuthorized] = React.useState(false);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
@@ -16,6 +19,21 @@ export default function Home() {
               </h2>
               <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
                 Create new invoice
+              </p>
+            </a>
+          </>
+        </Link>
+        <Link href="/users" legacyBehavior>
+          <>
+            <a className="group cursor-pointer rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:text hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 hover:text-black">
+              <h2 className={`mb-3 text-2xl font-semibold`}>
+                Users
+                <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+                  -&gt;
+                </span>
+              </h2>
+              <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
+                Create, Edit Users
               </p>
             </a>
           </>
