@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, createContext, useEffect } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 interface AuthState extends State {
   setAuthState: React.Dispatch<React.SetStateAction<State>>;
@@ -21,14 +21,14 @@ interface State {
 }
 
 export const AuthenticationContext = createContext<AuthState>({
-    loading: false,
-    error: null,
-    data: null,
-    setAuthState: () => {},
-  });
+  loading: false,
+  error: null,
+  data: null,
+  setAuthState: () => {},
+});
 
 function AuthContext({ children }: { children: React.ReactNode }) {
-  const router = useRouter()
+  const router = useRouter();
   const [authState, setAuthState] = useState<State>({
     loading: true,
     data: null,
@@ -36,7 +36,6 @@ function AuthContext({ children }: { children: React.ReactNode }) {
   });
 
   const fetchUser = async () => {
-    
     setAuthState({
       data: null,
       error: null,
@@ -44,8 +43,10 @@ function AuthContext({ children }: { children: React.ReactNode }) {
     });
 
     try {
-      const response: any = await fetch("http://localhost:3000/api/user-registration/me").then(res=>res.json());
-      if(response.user) router.push('/')
+      const response: any = await fetch("api/verify").then(
+        (res) => res.json()
+      );
+      if (response.user) router.push("/");
       setAuthState({
         data: response.user,
         error: null,

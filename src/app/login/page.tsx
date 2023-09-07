@@ -1,28 +1,29 @@
 "use client";
 import { AuthenticationContext } from "@/components/AuthContext";
 import React, { useContext, useState } from "react";
-import { useRouter } from 'next/navigation'
- 
+import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [loginDetails, setLoginDetails] = useState<{
     username: string;
     password: string;
   }>({ username: "", password: "" });
+
   const { setAuthState } = useContext(AuthenticationContext);
+
   async function onLoginSubmit() {
     try {
       let data = loginDetails;
-      const response:any = await fetch("/api/login", {
+      const response: any = await fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...data }),
-      }).then(res=>res.json());
-      setAuthState(response)
-      router.push('/')
+      }).then((res) => res.json());
+      setAuthState(response);
+      router.push("/");
     } catch (error) {
       console.error("Error:", error);
     }
