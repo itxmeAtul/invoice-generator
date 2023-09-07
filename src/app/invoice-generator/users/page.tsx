@@ -6,11 +6,37 @@ export interface userModal {
   userData: any;
 }
 
+export interface userFormData {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  passwordName: string;
+  repeatdPassword: string;
+  mobileNo: string;
+}
+
 export default function Page() {
   const [showModal, setShowModal] = useState<userModal>({
     visible: false,
     userData: {},
   });
+
+  const createEditUser = async () => {
+    try {
+      let data = { username: "atul", password: "atul123" };
+      const response = await fetch("/api/user-registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ params: data }),
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-4">
@@ -225,7 +251,8 @@ export default function Page() {
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
-                setShowModal({ userData: {}, visible: false });
+                // createEditUser();
+                // setShowModal({ userData: {}, visible: false });
               }}
             >
               Submit

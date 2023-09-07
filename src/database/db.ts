@@ -7,6 +7,8 @@ const MONGODB_URI: string = process.env.MONGODBURL || "";
 const connectDB = async () => {
   try {
     await mongoose.connect(MONGODB_URI, {
+      dbName:'invoice-generator',
+      retryReads:true
     //   useUnifiedTopology: true,
     });
     console.log("Connected to MongoDB");
