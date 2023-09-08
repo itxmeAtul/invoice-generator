@@ -1,7 +1,12 @@
 "use client";
-import { AuthenticationContext } from "@/components/AuthContext";
+// import { AuthenticationContext } from "@/components/AuthContext";
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login",
+};
 
 const Login = () => {
   const router = useRouter();
@@ -10,7 +15,7 @@ const Login = () => {
     password: string;
   }>({ username: "", password: "" });
 
-  const { setAuthState } = useContext(AuthenticationContext);
+  // const { setAuthState } = useContext(AuthenticationContext);
 
   async function onLoginSubmit() {
     try {
@@ -22,7 +27,7 @@ const Login = () => {
         },
         body: JSON.stringify({ ...data }),
       }).then((res) => res.json());
-      setAuthState(response);
+      // setAuthState(response);
       router.push("/");
     } catch (error) {
       console.error("Error:", error);

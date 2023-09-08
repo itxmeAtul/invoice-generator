@@ -18,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <AuthContext>{children}</AuthContext> */}
-        {children}
+        {/* <AuthContext> */}
+          {children}
+          {/* </AuthContext> */}
+        {/* {children} */}
       </body>
     </html>
   );

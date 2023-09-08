@@ -33,7 +33,7 @@ export const POST = async (req: Request, res: Response) => {
           },
           process.env.secretKey!,
           {
-            expiresIn: "1M",
+            expiresIn: "30 days",
           }
         );
         const cookieStore = cookies();

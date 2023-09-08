@@ -5,8 +5,9 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
 export const GET = async () => {
+  const cookieStore = cookies();
   try {
-    const cookieStore = cookies();
+
     const bearerToken = cookieStore.get("Authorization");
 
     console.log("1", bearerToken);
@@ -45,6 +46,7 @@ export const GET = async () => {
     }
   } catch (error) {
     console.log("9", error);
+    cookieStore.delete("Authorization");
     return NextResponse.json({ message: "fail" }, { status: 400 });
   }
 };
